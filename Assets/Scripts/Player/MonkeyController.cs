@@ -27,6 +27,14 @@ namespace ServiceLocator.Player
             ResetAttackTimer();
         }
 
+        public void UpdateMonkey()
+        {
+            if (bloonsInRange.Count > 0)
+            {
+                RotateTowardsTarget(bloonsInRange[0]);
+                ShootAtTarget(bloonsInRange[0]);
+            }
+        }
         public void SetPosition(Vector3 positionToSet) => monkeyView.transform.position = positionToSet;
 
         public void BloonEnteredRange(BloonController bloon)
@@ -60,7 +68,7 @@ namespace ServiceLocator.Player
                 ProjectileController projectile = projectilePool.GetProjectile(monkeyScriptableObject.projectileType);
                 projectile.SetPosition(monkeyView.transform.position);
                 projectile.SetTarget(targetBloon);
-                SoundService.Instance.PlaySoundEffects(Sound.SoundType.MonkeyShoot);
+                GameService.Instance.soundService.PlaySoundEffects(Sound.SoundType.MonkeyShoot);
                 ResetAttackTimer();
             }
         }
