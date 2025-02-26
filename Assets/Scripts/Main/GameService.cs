@@ -11,7 +11,7 @@ namespace ServiceLocator.Main
 {
     public class GameService : GenericMonoSingleton<GameService>
     {
-        // Services:
+        // Services:s
         public EventService EventService { get; private set; }
         public MapService MapService { get; private set; }
         public WaveService WaveService { get; private set; }
@@ -34,12 +34,23 @@ namespace ServiceLocator.Main
 
         private void Start()
         {
+            CreateServices();
+            InjectServices();
+        }
+
+        private void CreateServices()
+        {
             EventService = new EventService();
             UIService.SubscribeToEvents();
             MapService = new MapService(mapScriptableObject);
             WaveService = new WaveService(waveScriptableObject);
             SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
             PlayerService = new PlayerService(playerScriptableObject);
+        }
+
+        void InjectServices()
+        {
+            PlayerService.Init(UIService, MapService, SoundService);
         }
 
         private void Update()
