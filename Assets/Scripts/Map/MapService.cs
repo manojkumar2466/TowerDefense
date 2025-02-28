@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using ServiceLocator.Main;
 using ServiceLocator.Player;
-
+using ServiceLocator.Events;
 namespace ServiceLocator.Map
 {
     public class MapService
@@ -15,6 +15,8 @@ namespace ServiceLocator.Map
         private MapData currentMapData;
         private SpriteRenderer tileOverlay;
 
+        private EventService eventService;
+
         public MapService(MapScriptableObject mapScriptableObject)
         {
             this.mapScriptableObject = mapScriptableObject;
@@ -23,7 +25,11 @@ namespace ServiceLocator.Map
             SubscribeToEvents();
         }
 
-        private void SubscribeToEvents() => GameService.Instance.EventService.OnMapSelected.AddListener(LoadMap);
+        public void Init(EventService eventService)
+        {
+            this.eventService = eventService;
+        }
+        private void SubscribeToEvents() => eventService.OnMapSelected.AddListener(LoadMap);
 
         private void LoadMap(int mapId)
         {
